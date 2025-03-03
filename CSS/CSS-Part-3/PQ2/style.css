@@ -1,0 +1,28 @@
+body {
+    align-self: center;
+}
+
+.container {
+    height: 200px;
+    width: 70px;
+    border: 2px solid black;
+}
+
+.content {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    margin: 10px;
+}
+
+#c1 {
+    background-color: red;
+}
+
+#c2 {
+    background-color: yellow;
+}
+
+#c3 {
+    background-color: green;
+}
