@@ -220,7 +220,45 @@ a{
 }
 
 .album {
+    height: 100%;
     width: 25%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.album-song-img {
+    height: 3rem;
+}
+
+.song-img {
+    height: 100%;
+    border-radius: 0.2rem;
+}
+
+.song-info {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.song-info small {
+    opacity: 0.7;
+}
+
+.song-icons {
+    display: flex;
+    gap: 1rem;
+    opacity: 0.7;
+}
+
+.song-icons i{
+    opacity: 0.7;
+}
+
+.song-icons i:hover {
+    opacity: 1;
 }
 
 .player {
@@ -254,6 +292,7 @@ a{
     background-color: #ddd;
     border-radius: 100px;
     height: 0.2rem;
+    margin-top: -10px;
 }
 
 .progress-bar::-webkit-slider-thumb {
@@ -267,4 +306,38 @@ a{
 
 .controls {
     width: 25%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.controls i {
+    opacity: 0.7;
+}
+
+.controls i:hover {
+    opacity: 1;
+}
+
+.volume-slider {
+    appearance: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    appearance: none;
+    height: 12px;
+    width: 12px;
+    background: #fff;
+    border-radius: 50%;
+    margin-top: -4px;
+}
+
+.volume-slider::-webkit-slider-runnable-track {
+    height: 5px;
+    background: #ddd;
+    border-radius: 5px;
 }
