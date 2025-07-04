@@ -7,6 +7,8 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
+const { listingSchema } = require("./schema.js");
+const { error } = require("console");
 
 const port = 8080;
 
@@ -35,9 +37,7 @@ main()
         console.log("Something went wrong!!");
     });
 
-app.listen(port, () => {
-    console.log(`Server is listening on port ${port}`);
-});
+
 
 app.get("/", (req, res) => {
     res.send("working");
@@ -58,6 +58,16 @@ app.get("/", (req, res) => {
 
 //     res.send("working");
 // });
+
+const validateListing = (req, res, next) => {
+    let { error } = listingSchema.validate(req.body);
+    if(error){
+        let errMsg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(400, errMsg);
+    }else{
+        next();
+    }
+}
 
 
 
@@ -80,10 +90,7 @@ app.get("/listings/:id", wrapAsync(async (req, res) => {
 }));
 
 //Create Route
-app.post("/listings", wrapAsync(async (req, res, next) => {
-    if(!req.body.listing){
-        throw new ExpressError(400, "Send valid data for listing!");
-    }
+app.post("/listings", validateListing, wrapAsync(async (req, res, next) => {
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect("/listings");
@@ -97,7 +104,7 @@ app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
 }));
 
 //Update Route
-app.put("/listings/:id", wrapAsync(async (req, res) => {
+app.put("/listings/:id", validateListing, wrapAsync(async (req, res) => {
     let { id } = req.params;
     await Listing.findByIdAndUpdate(id, {...req.body.listing});
     res.redirect(`/listings/${id}`);
@@ -117,5 +124,10 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
 
 app.use((err, req, res, next) => {
     let { statusCode = 500, message = "Something went wrog!" } = err;
-    res.status(statusCode).send(message);
+    res.status(statusCode).render("error.ejs", { err });
+    // res.status(statusCode).send(message);
+});
+
+app.listen(port, () => {
+    console.log(`Server is listening on port ${port}`);
 });
