@@ -7,6 +7,8 @@ async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/relationDemo");
 }
 
+
+//One to Squillions
 const userSchema = new Schema({
   username: String,
   email: String
@@ -24,7 +26,7 @@ const postSchema = new Schema({
 const User = mongoose.model("User", userSchema);
 const Post = mongoose.model("Post", postSchema);
 
-const addData = async () => {
+// const addData = async () => {
   // let user1 = new User({
   //   username: "rahulkumar",
   //   email: "rahul@gmail.com",
@@ -40,16 +42,23 @@ const addData = async () => {
   // await user1.save();
   // await post1.save();
 
-  let user = await User.findOne({username: "rahulkumar"});
+//   let user = await User.findOne({username: "rahulkumar"});
 
-  let post2 = new Post({
-    connect: "Bye bye!",
-    likes: 18
-  });
+//   let post2 = new Post({
+//     connect: "Bye bye!",
+//     likes: 18
+//   });
 
-  post2.user = user;
+//   post2.user = user;
 
-  await post2.save();
-};
+//   await post2.save();
+// };
 
-addData();
+// addData();
+
+const getData = async () => {
+  let res = await Post.findOne({}).populate("user", "username");
+  console.log(res);
+}
+
+getData();
