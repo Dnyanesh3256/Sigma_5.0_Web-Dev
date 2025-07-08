@@ -4,11 +4,18 @@ const user = require("./routes/user.js");
 const post = require("./routes/post.js");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
+const flash = require("connect-flash");
+const path = require("path");
 
 const port = 8080; 
 
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
 app.use("/users", user);
 app.use("/posts", post);
+
+app.use(flash());
 
 const sessionOptions = {
     secret: "secretstring",
@@ -17,6 +24,12 @@ const sessionOptions = {
 }
 
 app.use(session(sessionOptions));
+
+app.use((req, res, next) => {
+    res.locals.errMsg = req.flash("error");
+    res.locals.succMsg = req.flash("success");
+    next();
+});
 
 app.get("/test", (req, res) => {
     res.send("test running");
@@ -39,14 +52,26 @@ app.get("/reqcount", (req, res) => {
 });
 
 // storing session info
+// app.get("/register", (req, res) => {
+//     let { name= "Anonymous" } = req.query;
+//     req.session.name = name;
+//     req.flash("success", "user registered successfully!");
+//     res.redirect("/hello");
+// });
+
 app.get("/register", (req, res) => {
     let { name= "Anonymous" } = req.query;
     req.session.name = name;
-    res.send(name);
+    if(name === "Anonymous"){
+        req.flash("error", "user not registerd!");
+    }else{
+        req.flash("success", "user registerd successfully!");
+    }
+    res.redirect("/hello");
 });
 
 app.get("/hello", (req, res) => {
-    res.send(`hello, ${req.session.name}`);
+    res.render("page.ejs", { name: req.session.name });
 });
 
 // app.get("/", (req, res) => {
