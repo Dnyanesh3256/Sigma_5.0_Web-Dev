@@ -19,6 +19,8 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 
+const MongoStore = require("connect-mongo");
+
 const port = 8080;
 
 app.set("view engine", "ejs");
@@ -32,10 +34,12 @@ app.use(methodOverride("_method"));
 
 
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+// const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+
+const dbUrl = process.env.ATLAS_DB_URL;
 
 async function main() {
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(dbUrl);
 }
 
 main()
@@ -47,11 +51,24 @@ main()
         console.log("Something went wrong!!");
     });
 
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    crypto: {
+        secret: process.env.SECRET,
+    },
+    touchAfter: 24 * 3600
+});
+
+store.on("error", () => {
+    console.log("error in mongo session store", err);
+});
+
 const sessionOptions = {
-    secret: "secretcode",
+    store: store,
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
-    coockie: {
+    cookie: {
         expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
         maxAge: 7 * 24 *60 * 60 * 1000,
         httpOnly: false 
@@ -90,13 +107,13 @@ app.use("/listings", listingRouter);
 app.use("/listings/:id", reviewRouter);
 app.use("/", userRouter);
 
-app.get("/", (req, res) => {
-    res.send("working");
-});
+// app.get("/", (req, res) => {
+//     res.send("working");
+// });
 
 
 
-// app.all("*", (req, res, next) => {
+// app.all("/*", (req, res, next) => {
 //     next(new ExpressError(404, "Page not found!"));
 // });
 
