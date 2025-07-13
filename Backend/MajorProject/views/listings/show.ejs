@@ -1,8 +1,8 @@
 <% layout("/layouts/boilerplate.ejs") %>
 
 <script>
-    const mapToken = "<%= process.env.MAP_TOKEN %>"
-    let coordinates = "<%- JSON.stringify(listing.geometry.coordinates) %>";
+    const mapToken = "<%= process.env.MAP_TOKEN %>";
+    let listing = <%- JSON.stringify(JSON.stringify(listing)) %>;
 </script>
 
 <body>
@@ -10,8 +10,8 @@
         <div class="row justify-content-center">
             <!-- Main Content Column -->
             <div class="col-lg-8">
-                <!-- Main Heading - moved to left -->
-                <h2 class="mb-4"><b>demo8</b></h2>
+                <!-- Main Heading -->
+                <h2 class="mb-4"><b><%= listing.title %></b></h2>
                 
                 <!-- Listing Card -->
                 <div class="card show-card listing-card mb-4">
