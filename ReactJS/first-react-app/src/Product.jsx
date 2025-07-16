@@ -1,4 +1,4 @@
-import "./assets/Product.css";
+import "./Product.css";
 
 function Product({title, features, price}) {
     let isDiscount = price > 30000;
