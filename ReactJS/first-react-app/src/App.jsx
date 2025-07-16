@@ -1,12 +1,13 @@
 // import "./Product"
 import Product from './Product'
 import Msgbox from "./Msgbox"
+import Card from './Card'
+import CardTab from './CardTab'
 
 function App() {
   return (
     <>
-      <Msgbox username="Dnyanesh3256" color="red" />
-      <Msgbox username="Amar911" color="orange" />
+      <CardTab />
     </>
   )
 }
